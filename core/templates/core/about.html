@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+<!-- Start header -->
+<div class="all-page-title page-breadcrumb">
+	<div class="container text-center">
+		<div class="row">
+			<div class="col-lg-12">
+				<h1>About Us</h1>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- End header -->
+
+<!-- Start About -->
+<div class="about-section-box">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-6 col-md-6">
+				<img src="{{ about.image.url }}" alt="" class="img-fluid">
+			</div>
+			<div class="col-lg-6 col-md-6 text-center">
+				<div class="inner-column">
+					<h1>Welcome To <span>Yamifood Restaurant</span></h1>
+					<h4>Little Story</h4>
+					<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque auctor suscipit feugiat. Ut
+						at pellentesque ante, sed convallis arcu. Nullam facilisis, eros in eleifend luctus, odio ante
+						sodales augue, eget lacinia lectus erat et sem. </p>
+					<p>Sed semper orci sit amet porta placerat. Etiam quis finibus eros. Sed aliquam metus lorem, a
+						pellentesque tellus pretium a. Nulla placerat elit in justo vestibulum, et maximus sem pulvinar.
+					</p>
+					<a class="btn btn-lg btn-circle btn-outline-new-white" href="#">Reservation</a>
+				</div>
+			</div>
+			<div class="col-md-12">
+				<div class="inner-pt">
+					<p> {{ about.body }} </p>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- End About -->
+
+<!-- Start Menu -->
+<div class="menu-box">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="heading-title text-center">
+					<h2>Special Menu</h2>
+					<p>Lorem Ipsum is simply dummy text of the printing and typesetting</p>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="special-menu text-center">
+					<div class="button-group filter-button-group">
+						<button class="active" data-filter="*">All</button>
+						<button data-filter=".drinks">Drinks</button>
+						<button data-filter=".lunch">Lunch</button>
+						<button data-filter=".dinner">Dinner</button>
+					</div>
+				</div>
+			</div>
+		</div>
+ 
+		<div class="row special-list">
+			{% for food in foods %}
+				<div class="col-lg-4 col-md-6 special-grid {{ food.category }}">
+					<div class="gallery-single fix">
+						<img src="{{ food.image.url }}" class="img-fluid" alt="{{ food.title }}">
+						<div class="why-text">
+							<h4>{{ food.title }}</h4>
+							<p>{{ food.text }}</p>
+							<h5> ${{food.price}}</h5>
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		
+		</div>
+	</div>
+</div>
+<!-- End Menu -->
+{% endblock %}

@@ -1,0 +1,177 @@
+{% extends 'base.html' %}
+{% load static %}
+<!-- Start All Pages -->
+{% block body %}
+<div class="all-page-title page-breadcrumb">
+    <div class="container text-center">
+        <div class="row">
+            <div class="col-lg-12">
+                <h1>Blog</h1>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End All Pages -->
+
+<!-- Start blog details -->
+<div class="blog-box">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="heading-title text-center">
+                    <h2>Blog</h2>
+                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xl-8 col-lg-8 col-12">
+                <div class="blog-inner-details-page">
+                    <div class="blog-inner-box">
+                        <div class="side-blog-img">
+                            <img class="img-fluid" src="{{ article.image_for_detail.url }}" alt="">
+                            <div class="date-blog-up">
+                                27 Fab
+                            </div>
+                        </div>
+                        <div class="inner-blog-detail details-page">
+                            <h3>{{ article.title }}</h3>
+                            <ul>
+                                <li><i class="zmdi zmdi-account"></i>Posted By : <span>{{ article.author }}</span>
+                                </li>
+                                <li>|</li>
+                                <li><i class="zmdi zmdi-time"></i>Time : <span>{{ article.created }}</span></li>
+                            </ul>
+                            <p>{{ article.body }}</p>
+                        </div>
+                    </div>
+                    <div class="blog-comment-box">
+                        <!-- comments -->
+                        <h3>Comments</h3>
+                        {% for comment in article.comments.all %}
+                            {% if comment.parent == None %}
+                                <div class="comment-item">
+                                    <div class="comment-item-left">
+                                        <img src="{% static 'images/avt-img.jpg' %}" alt="">
+                                    </div>
+                                    <div class="comment-item-right">
+                                        <div class="pull-left">
+                                            <a href="#">{{ comment.user }}</a>
+                                        </div>
+                                        <div class="pull-right">
+                                            <i class="fa fa-clock-o" aria-hidden="true"></i>Time :
+                                            <span>{{ comment.created_at }}</span>
+                                        </div>
+                                        <div class="des-l">
+                                            <p>{{ comment.body }}</p>
+                                        </div>
+                                        <a href="#" onclick="set_value({{ comment.id }})" class="right-btn-re"><i class="fa fa-reply" aria-hidden="true"></i>
+                                            Reply</a>
+                                    </div>
+                                </div>
+                                {% for reply in comment.replies.all %}
+                                    <div class="comment-item children">
+                                        <div class="comment-item-left">
+                                            <img src="{% static 'images/avt-img.jpg' %}" alt="">
+                                        </div>
+                                        <div class="comment-item-right">
+                                            <div class="pull-left">
+                                                <a href="#">{{reply.user}}</a>
+                                            </div>
+                                            <div class="pull-right">
+                                                <i class="fa fa-clock-o" aria-hidden="true"></i>Time : <span>{{ reply.created_at }}</span>
+                                            </div>
+                                            <div class="des-l">
+                                                <p>{{ reply.body }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="comment-respond-box">
+                        <h3>Leave your comment </h3>
+                        <div class="comment-respond-form">
+                            {% if request.user.is_authenticated %}
+                                <form id="commentrespondform" class="comment-form-respond row" method="post">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="parent_id" id="parent_id" value="">
+                                    <div class="col-lg-6 col-md-6 col-sm-6">
+                                        <div class="form-group">
+                                            {{ form }}
+{#                                            <textarea class="form-control" id="body" name="body" placeholder="Your Message" rows="2"></textarea>#}
+                                        </div>
+                                    </div>  
+                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                        <button class="btn btn-submit">Submit comment</button>
+                                    </div>
+                                </form>
+                                {% else %}
+                                    <p class="btn btn-danger"><a href=""></a>for send comment please login</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xl-4 col-lg-4 col-md-6 col-sm-8 col-12 blog-sidebar">
+                <div class="right-side-blog">
+                    <h3>Search</h3>
+                    <form action="{% url 'blog:search' %}" method="get">
+                        <div class="blog-search-form">
+                            <input name="search" placeholder="Search blog" type="text">
+                            <button class="search-btn">
+                                <i class="fa fa-search" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <h3>Categories</h3>
+                    <div class="blog-categories">
+                        <ul>
+                            {% for cat in category|slice:":4" %}
+                            <li><a href="{% url 'blog:category_detail' cat.slug %}"><span>{{ cat.name }}</span></a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <h3>Recent Post</h3>
+                    <div class="post-box-blog">
+                        <div class="recent-post-box">
+                            {% for article in article_view_sort|slice:":3" %}
+                                <div class="recent-box-blog">
+                                    <div class="recent-img">
+                                        <img style="width: 80px; height: 80px;" class="img-fluid" src="{{ article.image.url }}" alt="{{ article.title }}">
+                                    </div>
+                                    <div class="recent-info">
+                                        <ul>
+                                            <li><i class="zmdi zmdi-account"></i>Posted By : <span>{{ article.author }}</span>
+                                            </li>
+                                            <li>|</li>
+                                            <li><i class="zmdi zmdi-time"></i>Time : <span>{{ article.created }}</span></li>
+                                        </ul>
+                                        <h4> {{article.body|truncatewords:5}} </h4>
+                                    </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <h3>Recent Tag</h3>
+                    <div class="blog-tag-box">
+                        <ul class="list-inline tag-list">
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End details -->
+<script>
+    function set_value(id){
+        document.getElementById('parent_id').value = id;
+        window.location.href = '#body';
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+    <!-- Start All Pages -->
+    <div class="all-page-title page-breadcrumb">
+        <div class="container text-center">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1>Blog</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End All Pages -->
+
+    <!-- Start blog -->
+    <div class="blog-box">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="heading-title text-center">
+                        <h2>Blog</h2>
+                        <p>Welcome to Yamifood blog</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                {% for article in object_list %}
+                    <div class="col-lg-4 col-md-6 col-12">
+                        <div class="blog-box-inner">
+                            <div class="blog-img-box">
+                                <img class="img-fluid" src="{{ article.image.url }}" alt="">
+                            </div>
+                            <div class="blog-detail">
+                                <h4>{{ article.title }}</h4>
+                                <ul>
+                                    <li><span>Post by {{ article.author }}</span></li>
+                                    <li>|</li>
+                                    <li><span>{{ article.created }}</span></li>
+                                </ul>
+                                <p>{{ article.body|truncatechars:300 }}</p>
+                                <a class="btn btn-lg btn-circle btn-outline-new-white"
+                                   href="{{ article.get_absolute_url }}">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        <!-- End blog -->
+
+    </div>
+    {#    {% if page_obj.has_otder_pages %}#}
+    <nav class="d-flex justify-content-center mb-5" aria-label="...">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}" tabindex="-1">Previous</a>
+                </li>
+            {% endif %}
+            {% for page in page_obj.paginator.page_range %}
+                {% if page_obj.number == page %}
+                    <li class="page-item active">
+                        <a class="page-link" href="?page={{ page }}">{{ page }}<span class="sr-only">(current)</span></a>
+                    </li>
+                {% else %}
+                    <li class="page-item"><a class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+                {% endif %}
+            {% endfor %}
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {#    {% endif %}#}
+{% endblock %}
